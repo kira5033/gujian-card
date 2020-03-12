@@ -24,12 +24,12 @@
                 {{ item.name }}({{ item.point }})：
               </div>
               <div v-for="(card,index) in cardName(item.package)" :key="index">
-                <span :class="card.isActive === true ? 'isfocus' : ''">
+                <span :class="card.isActive === true ? 'isfocus' : ''" @click="setSearchHandler(card.name)">
                   {{ card.name }} 
                 </span>
-                <slot v-if='cardName(item.package).length !== index + 1'>
+                <template v-if='cardName(item.package).length !== index + 1'>
                   , 
-                </slot>
+                </template>
               </div>
           </div>
           
@@ -70,7 +70,7 @@
         <!-- card list block -->
         <div class="main-list">
           <div class="list-img" v-for="(item,index) in cardList" :key="index" @click="cardHandler(item.id)">
-            <img :src="require('@/assets/image/' + item.img)" alt="">
+            <b-img-lazy :src="require('@/assets/image/' + item.img)" alt=""></b-img-lazy>
             <div class="cover" v-if="!item.isActive"><div class="mask"></div></div>
           </div>
         </div>
@@ -115,7 +115,6 @@ export default {
   },
   methods:{
     cardHandler(id){
-
       let { cardStatus, activeQty} = this.parseData(id)
       // Update card active status
       this.$store.commit('updateCardStatus', { "id": id, "status": cardStatus})
@@ -129,13 +128,16 @@ export default {
           this.$store.commit('updateRuleActiveQty', { "index": key, "qty": activeQty})
         }
       });
-
+      // calc score
       this.checkGameScore()
     },
     cardName(list){
       return this.baseCardList.filter((item) => {
         return list.indexOf(item.id) >= 0
       })
+    },
+    setSearchHandler(name){
+      this.keyword = name
     },
     parseData(id){
       let index = this.selectedCard.findIndex((_id) => {
@@ -188,159 +190,5 @@ export default {
 
 <style>
 @import './assets/css/base.css';
-#app {
-  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
-  font-family: "Helvetica", "Arial","LiHei Pro","黑體-繁","微軟正黑體", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  height: 1024px;
-}
-
-
-.nav {
-  background-color: black;
-  font-size: 18px;
-  width: 100%;
-  color: aliceblue;
-  font-weight: bold;
-  display: flex;
-  justify-content:space-between;
-  height: 5vh;
-  line-height:  5vh;
-  /* padding: 1% 0; */
-  position: fixed;
-  z-index: 999;
-}
-
-.nav .nav-item{
-  width: 33%;
-}
-
-.nav .nav-title{
-  text-align: center;
-}
-
-.nav .left {
-  padding-left: 15px;
-  text-align: initial;
-}
-
-.nav .right {
-  text-align: right;
-  padding-right: 15px;
-}
-
-
-.content-container {
-  display: flex;
-  width: 100%;
-  /* padding-bottom: 100px; */
-}
-
-.search{
-  width: 70%;
-  margin: 0 auto;
-  padding-top: 20px;
-}
-
-.leftMenu{
-  width:25%;
-  height: 100%;
-  background-color: bisque;
-  margin: 0; 
-  padding: 0;
-  padding-top: 5vh;
-  overflow-y:auto;
-}
-
-.main{
-  width: 75%;
-  height: 100%;
-  /* background-color: cornflowerblue; */
-  background-color: #D0CBCB;
-  /* background-color: #ffffff; */
-  padding: 0;
-  margin: 0 auto;
-  padding-top: 5vh;
-  overflow-y:auto;
-}
-
-.main .top{
-  min-height: 100px;
-  margin: 20px auto 0 auto;
-}
-
-.main .main-list{
-  /* padding: 0 25px 20px 55px; */
-  margin: 20px auto;
-  max-width: 1220px;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.main .main-list .list-img{
-  position: relative;
-}
-
-.main img{
-  width: auto;
-  height: auto;
-  z-index: 1;
-}
-
-.combine-main {
-  margin: 20px 10px;
-}
-
-.combine-content{
-  display: flex;
-  flex-wrap: wrap;
-  line-height: 18px;
-}
-
-.areaCenter {
-  display: flex;
-}
-
-.isfocus{
-  color: red;
-}
-
-.cover{
-  color: #fff;
-  position: absolute;
-  top: 50%;
-  /* height: calc(100% - 20px); */
-  height: 100%;
-  /* width: calc(100% - 20px); */
-  width: 100%;
-  padding: 15px 0;
-  text-align: center;
-  font-size: 25px;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.6);
-}
-
-.mask{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  Transform:translate(-50%,-50%);
-  width: fit-content;
-}
-
-.achievement {
-  font-weight: 600;
-}
-
-.sm-note{
-  font-size: 12px;
-  padding-bottom: 20px;
-}
-
+@import './assets/css/main.css';
 </style>
