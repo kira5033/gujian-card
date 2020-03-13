@@ -7,12 +7,13 @@
   margin: 0;
   padding: 0;
   display: flex;
-  height: 1024px;
+  height: 100%;
+  width: 100%;
 }
 
 /* Navbar */
 .nav {
-  background-color: black;
+  background-color: #2d2d2d;
   font-size: 18px;
   width: 100%;
   color: aliceblue;
@@ -66,6 +67,11 @@
   overflow-y:auto;
 }
 
+.leftMenu .sort{
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
 .main{
   width: 75%;
   height: 100%;
@@ -94,8 +100,14 @@
 }
 
 .main img{
-  max-width: 244px;
-  max-height: 324px;
+  width: 100%;
+  height: auto;
+  /* max-width: 244px;
+  max-height: 324px; */
+  /* max-width: 120px;
+  max-height: 235px; */
+  max-width: 170px;
+  max-height: 250px;
 }
 
 @media (max-width: 1440px) { 
@@ -103,20 +115,20 @@
     max-width: 1000px;
   }
 
-  /* .main img{
-    width: 80%;
-    height: 80%;
-  } */
+  .main img{
+    max-width: 120px;
+    max-height: 235px;
+  }
 }
 
 .combine-main {
-  margin: 20px 10px;
+  padding-top: 15px;
 }
 
 .combine-content{
+  margin: 5px 0 0 10px;
   display: flex;
   flex-wrap: wrap;
-  line-height: 18px;
 }
 
 .areaCenter {
@@ -137,7 +149,7 @@
   text-align: center;
   font-size: 25px;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .mask{
@@ -149,10 +161,34 @@
 }
 
 .achievement {
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .sm-note{
   font-size: 12px;
   padding-bottom: 20px;
+}
+/* 
+.short-pill{
+  padding-right: 0.6em;
+  padding-left: 0.6em;
+  border-radius: 10rem;
+}
+
+.short-name{
+  color: #fff;
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-size: 75%;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  margin-right: 5px;
+} */
+
+.short-name{
+  margin-right: 5px;
 }

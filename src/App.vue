@@ -7,7 +7,7 @@
         古劍奇譚 - 千秋戲模擬器
       </div>
       <div class="nav-item nav-title">
-        目前得分：{{ gameScore}}
+        分數：{{ gameScore }}
       </div>
       <div class="nav-item right">
         
@@ -18,22 +18,28 @@
     <div class="content-container">
       <!-- left block start -->
       <div class="leftMenu">
-        <div class="combine-main" v-for="(item,index) in cardRule" :key="index">
-          <div class="combine-content">
-              <div class="achievement">
-                {{ item.name }}({{ item.point }})：
-              </div>
-              <div v-for="(card,index) in cardName(item.package)" :key="index">
-                <span :class="card.isActive === true ? 'isfocus' : ''" @click="setSearchHandler(card.name)">
-                  {{ card.name }} 
-                </span>
-                <template v-if='cardName(item.package).length !== index + 1'>
-                  , 
-                </template>
-              </div>
-          </div>
-          
+        <!-- Only use one way to sort for now -->
+        <div class="sort" v-if="false">
+          <b-form-radio-group id="radio-group-2" v-model="sortType" name="radio-sub-component">
+            <b-form-radio value=1>達成率優先</b-form-radio>
+            <b-form-radio value=2>選取卡牌優先</b-form-radio>
+          </b-form-radio-group>
         </div>
+        <div class="combine-main">
+          <div class="combine-content" v-for="(item,index) in cardRule" :key="index">
+            <div class="achievement">
+              {{ item.name }}
+              <b-badge variant="light">{{ item.point }}</b-badge>：
+            </div>
+            <div v-for="(card,index) in cardName(item.package)" :key="index">
+              <h5>
+                <b-badge pill class="short-name" variant="danger" @click="setSearchHandler(card.name)" v-if="card.isActive === true">{{ card.name }}</b-badge>
+                <b-badge pill class="short-name" variant="secondary" @click="setSearchHandler(card.name)" v-else>{{ card.name }}</b-badge>
+              </h5>
+            </div>
+          </div>
+        </div>
+        
       </div>
       <!-- left block end -->
       <!-- right block start -->
@@ -47,7 +53,7 @@
                 <b-icon icon="search"></b-icon>
               </b-input-group-prepend>
 
-              <b-form-input type="search" v-model="keyword" placeholder="搜尋卡牌"></b-form-input>
+              <b-form-input type="search" v-model.trim="keyword" placeholder="搜尋卡牌"></b-form-input>
               <b-input-group-append>
                 <b-button variant="info" @click="playGame()">開新局</b-button>
               </b-input-group-append>
@@ -69,13 +75,15 @@
         
         <!-- card list block -->
         <div class="main-list">
+          
           <div class="list-img" v-for="(item,index) in cardList" :key="index" @click="cardHandler(item.id)">
-            <b-img-lazy :src="require('@/assets/image/' + item.img)" alt=""></b-img-lazy>
+            <b-img-lazy :src="require('@/assets/image/' + item.img)" :alt="item.name" offset=150></b-img-lazy>
             <div class="cover" v-if="!item.isActive"><div class="mask"></div></div>
           </div>
+          
         </div>
 
-        <span class="sm-note">Created and maintained by <a href="" target="_blank">Kira5033</a> @ 2020.03.11<br>This project is hosted on <a href="" target="_blank">GitHub</a>. Any bug report or suggestion is welcome.</span>
+        <span class="sm-note">Created and maintained by <a href="" target="_blank">Kira5033</a> @ 2020.03.13<br>This project is hosted on <a href="" target="_blank">GitHub</a>. Any bug report or suggestion is welcome.</span>
       </div>
       <!-- right block end -->
     </div>
@@ -92,7 +100,6 @@ export default {
     return {
       keyword: '',
       gameScore: 0,
-      season: null,
       selectedCard:[],
       selectedSeason:[ 1, 2, 3, 4 ],
     }
@@ -111,6 +118,14 @@ export default {
     },
     cardSeasonType(){
       return this.$store.getters['getSeasonType']
+    },
+    sortType:{
+      get(){
+        return this.$store.getters['getSortType']
+      },
+      set(val){
+        this.$store.commit('updateSortType', parseInt(val))
+      }
     }
   },
   methods:{
@@ -166,14 +181,19 @@ export default {
       }
     },
     checkGameScore(){
+      // let countScore = this.selectedCard.length * 2;
       let countScore = 0;
       this.cardRule.forEach((element, key) => {
         let activeStatus = false
+        let priority = 1
+        if(element.activeQty === element.package.length){
+          priority = 0
+        }
         if(element.activeQty === 0){
           activeStatus = true
           countScore += element.point
         }
-        this.$store.commit('updateRuleStatus', { "index": key, "status": activeStatus})
+        this.$store.commit('updateRuleStatus', { "index": key, "priority": priority, "status": activeStatus})
       });
       this.gameScore = countScore
     },

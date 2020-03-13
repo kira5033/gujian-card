@@ -9,14 +9,35 @@ export default new Vuex.Store({
     cardRule: [],
     cardList: [],
     seasonType: [],
+    sortType: 2,
   },
   getters: {
     getCardRule(state) {
       return state.cardRule.sort((a, b) => {
-        if (a.activeQty === b.activeQty) {
-          return a.id - b.id
+        if (state.sortType === 1) {
+          //達成率優先
+          // console.log("達成率優先")
+          if (a.activeQty === b.activeQty) {
+            return a.id - b.id
+          } else {
+            return a.activeQty - b.activeQty
+          }
         } else {
-          return a.activeQty - b.activeQty
+          //選取卡牌優先
+          // console.log("選取卡牌優先")
+          if (a.priority === b.priority) {
+            if (a.activeQty === b.activeQty) {
+              if (a.point === b.point) {
+                return a.id - b.id
+              } else {
+                return b.point - a.point
+              }
+            } else {
+              return a.activeQty - b.activeQty
+            }
+          } else {
+            return b.priority - a.priority
+          }
         }
       })
     },
@@ -25,6 +46,9 @@ export default new Vuex.Store({
     },
     getSeasonType(state) {
       return state.seasonType
+    },
+    getSortType(state) {
+      return state.sortType
     },
   },
   mutations: {
@@ -45,8 +69,12 @@ export default new Vuex.Store({
     updateRuleActiveQty(state, {index, qty}) {
       state.cardRule[index].activeQty += qty
     },
-    updateRuleStatus(state, {index, status}) {
+    updateRuleStatus(state, {index, priority, status}) {
+      state.cardRule[index].priority = priority
       state.cardRule[index].isActive = status
+    },
+    updateSortType(state, data) {
+      state.sortType = data
     },
   },
   actions: {
