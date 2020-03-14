@@ -17,7 +17,7 @@
     <!-- container start -->
     <div class="content-container">
       <!-- left block start -->
-      <div class="leftMenu">
+      <div class="leftMenu mobile-left">
         <!-- Only use one way to sort for now -->
         <div class="sort" v-if="false">
           <b-form-radio-group id="radio-group-2" v-model="sortType" name="radio-sub-component">
@@ -43,7 +43,7 @@
       </div>
       <!-- left block end -->
       <!-- right block start -->
-      <div class="main">
+      <div class="main mobile-main">
         <div class="top">
           <!-- search block start -->
           <div class="search">
@@ -73,7 +73,7 @@
           <!-- search block end -->
         </div>
 
-        <div v-if="autoRecommandCard.length > 0">
+        <div class="auto-recommand" v-if="autoRecommandCard.length > 0">
           出牌推薦：
           <span v-for="(item, index) in autoRecommandCard" :key="index" >
             <span :class="displaySeason(item.type)" @click="cardHandler(item.id)">
@@ -274,8 +274,16 @@ export default {
         return b.priority - a.priority
       })
 
-      if(this.autoRecommandCard.length > 10){
-        this.autoRecommandCard = this.autoRecommandCard.slice(0, 9)
+      let arrayLength = 10
+      let sliceLength = 9
+
+      if(window.screen.width <= 400){
+        arrayLength = 5
+        sliceLength = 4
+      }
+
+      if(this.autoRecommandCard.length > arrayLength){
+        this.autoRecommandCard = this.autoRecommandCard.slice(0, sliceLength)
       }
 
     },
