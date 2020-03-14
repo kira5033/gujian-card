@@ -31,7 +31,7 @@
               {{ item.name }}
               <b-badge variant="light">{{ item.point }}</b-badge>：
             </div>
-            <div v-for="(card,index) in cardName(item.package)" :key="index">
+            <div v-for="(card,index) in findCard(item.package)" :key="index">
               <h5>
                 <b-badge pill class="short-name" variant="danger" @click="setSearchHandler(card.name)" v-if="card.isActive === true">{{ card.name }}</b-badge>
                 <b-badge pill class="short-name" variant="secondary" @click="setSearchHandler(card.name)" v-else>{{ card.name }}</b-badge>
@@ -72,15 +72,31 @@
           </div>
           <!-- search block end -->
         </div>
+
+        <div v-if="autoRecommandCard.length > 0">
+          出牌推薦：
+          <span v-for="(item, index) in autoRecommandCard" :key="index" >
+            <span :class="displaySeason(item.type)" @click="cardHandler(item.id)">
+              {{ item.name }}
+            </span>
+            <template v-if="autoRecommandCard.length - 1 !== index">
+              >
+            </template>
+          </span>
+        </div>
         
         <!-- card list block -->
         <div class="main-list">
           
-          <div class="list-img" v-for="(item,index) in cardList" :key="index" @click="cardHandler(item.id)">
-            <b-img-lazy :src="require('@/assets/image/' + item.img)" :alt="item.name" offset=150></b-img-lazy>
-            <div class="cover" v-if="!item.isActive"><div class="mask"></div></div>
-          </div>
-          
+          <template v-if="imgStatus === true">
+            <div class="list-img" v-for="(item,index) in cardList" :key="index" @click="cardHandler(item.id)">
+              <b-img-lazy :src="require('@/assets/image/' + item.img)" :alt="item.name" offset=150></b-img-lazy>
+              <div class="cover" v-if="!item.isActive"><div class="mask"></div></div>
+            </div>
+          </template>
+          <template v-else>
+            Loading...
+          </template>
         </div>
 
         <span class="sm-note">Created and maintained by <a href="" target="_blank">Kira5033</a> @ 2020.03.13<br>This project is hosted on <a href="" target="_blank">GitHub</a>. Any bug report or suggestion is welcome.</span>
@@ -102,6 +118,8 @@ export default {
       gameScore: 0,
       selectedCard:[],
       selectedSeason:[ 1, 2, 3, 4 ],
+      imgStatus: true,
+      autoRecommandCard: [],
     }
   },
   computed:{
@@ -145,8 +163,30 @@ export default {
       });
       // calc score
       this.checkGameScore()
+      // calc card priority
+      this.calcCardPrrority()
     },
-    cardName(list){
+    displaySeason(val){
+
+      let color = ''
+
+      switch (val) {
+        case 1:
+          color = 'season-spring'
+          break;
+        case 2:
+          color = 'season-summer'
+          break
+        case 3:
+          color = 'season-fall'
+          break
+        case 4:
+          color = 'season-winter'
+      }
+
+      return color
+    },
+    findCard(list){
       return this.baseCardList.filter((item) => {
         return list.indexOf(item.id) >= 0
       })
@@ -197,9 +237,52 @@ export default {
       });
       this.gameScore = countScore
     },
+    calcCardPrrority(){
+
+      this.autoRecommandCard = []
+
+      this.baseCardList.forEach((element) => {
+        this.autoRecommandCard.push({
+          "id": element.id,
+          "name": element.name,
+          "priority": 0,
+          "isActive": element.isActive,
+          "type": element.type
+        })
+      })
+
+      this.cardRule.forEach((element) => {
+
+        if(element.priority === 1 && element.package.length !== element.activeQty){
+
+          this.findCard(element.package).forEach((item) => {
+            if(item.isActive === false){
+              // console.log(`${this.autoRecommandCard[item.id-1].name} + 1`);
+              this.autoRecommandCard[item.id-1].priority += 1
+            }
+          })
+        }
+      })
+
+      // filter autoRecommandCard
+
+      this.autoRecommandCard = this.autoRecommandCard.filter((element) => {
+        return element.priority > 0 && element.isActive === false
+      })
+
+      this.autoRecommandCard = this.autoRecommandCard.sort((a,b) => {
+        return b.priority - a.priority
+      })
+
+      if(this.autoRecommandCard.length > 10){
+        this.autoRecommandCard = this.autoRecommandCard.slice(0, 9)
+      }
+
+    },
     playGame(){
       this.$store.dispatch('initialGame')
       this.gameScore = 0
+      this.autoRecommandCard = []
     }
   },
   mounted(){

@@ -76,6 +76,9 @@ export default new Vuex.Store({
     updateSortType(state, data) {
       state.sortType = data
     },
+    updateCardPriority(state, key) {
+      state.cardList[key].priority += 1
+    },
   },
   actions: {
     initialGame(context) {

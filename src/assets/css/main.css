@@ -110,19 +110,9 @@
   max-height: 250px;
 }
 
-@media (max-width: 1440px) { 
-  .main .main-list{
-    max-width: 1000px;
-  }
-
-  .main img{
-    max-width: 120px;
-    max-height: 235px;
-  }
-}
-
 .combine-main {
   padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .combine-content{
@@ -162,33 +152,41 @@
 
 .achievement {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .sm-note{
   font-size: 12px;
   padding-bottom: 20px;
 }
-/* 
-.short-pill{
-  padding-right: 0.6em;
-  padding-left: 0.6em;
-  border-radius: 10rem;
+
+.short-name{
+  margin-right: 5px;
 }
 
-.short-name{
-  color: #fff;
-  display: inline-block;
-  padding: 0.25em 0.4em;
-  font-size: 75%;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: baseline;
-  margin-right: 5px;
-} */
+.season-spring{
+  color: darkgreen;
+}
 
-.short-name{
-  margin-right: 5px;
+.season-summer{
+  color: crimson;
+}
+
+.season-fall{
+  color: coral;
+}
+
+.season-winter{
+  color: blue;
+}
+
+@media (max-width: 1440px) { 
+  .main .main-list{
+    max-width: 1000px;
+  }
+
+  .main img{
+    max-width: 120px;
+    max-height: 235px;
+  }
 }
