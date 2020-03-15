@@ -255,10 +255,17 @@ export default {
 
         if(element.priority === 1 && element.package.length !== element.activeQty){
 
+          let avgPriority = 1
+
+          if(element.activeQty === 1){
+            // avgPriority = Math.floor(element.point / element.activeQty)
+            avgPriority = element.point
+          }
+
           this.findCard(element.package).forEach((item) => {
             if(item.isActive === false){
               // console.log(`${this.autoRecommandCard[item.id-1].name} + 1`);
-              this.autoRecommandCard[item.id-1].priority += 1
+              this.autoRecommandCard[item.id-1].priority += avgPriority
             }
           })
         }
