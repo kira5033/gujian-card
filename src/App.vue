@@ -99,7 +99,7 @@
           </template>
         </div>
 
-        <span class="sm-note">Created and maintained by <a href="" target="_blank">Kira5033</a> @ 2020.03.13<br>This project is hosted on <a href="" target="_blank">GitHub</a>. Any bug report or suggestion is welcome.</span>
+        <span class="sm-note">Created and maintained by <a href="" target="_blank">Kira5033</a> @ 2020.03.15<br>This project is hosted on <a href="" target="_blank">GitHub</a>. Any bug report or suggestion is welcome.</span>
       </div>
       <!-- right block end -->
     </div>

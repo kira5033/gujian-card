@@ -104,8 +104,6 @@
   height: auto;
   /* max-width: 244px;
   max-height: 324px; */
-  /* max-width: 120px;
-  max-height: 235px; */
   max-width: 170px;
   max-height: 250px;
 }
@@ -315,7 +313,7 @@
   }
 
   .main .main-list{
-    max-width: 330px;
+    max-width: 310px;
     margin: 0 auto;
   }
 
@@ -324,7 +322,7 @@
   }
 
   .search{
-    width: 80%;
+    width: 90%;
   }
 
   .auto-recommand{
