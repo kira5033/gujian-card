@@ -90,7 +90,7 @@
           
           <template v-if="imgStatus === true">
             <div class="list-img" v-for="(item,index) in cardList" :key="index" @click="cardHandler(item.id)">
-              <b-img-lazy :src="require('@/assets/image/' + item.img)" :alt="item.name" offset=150></b-img-lazy>
+              <img :src="require('@/assets/image/' + item.img)" :alt="item.name" loading='lazy'>
               <div class="cover" v-if="!item.isActive"><div class="mask"></div></div>
             </div>
           </template>
